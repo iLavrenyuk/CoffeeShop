@@ -20,7 +20,7 @@ export default class MainPage extends Component {
         this.updateItems();
     }
 
-    onCoffeeLoaded = (bestItems) => {
+    onBestLoaded = (bestItems) => {
         this.setState({
             bestItems,
             loading: false
@@ -36,14 +36,12 @@ export default class MainPage extends Component {
 
     updateItems = () => {
         this.CoffeeService.getBest()
-            .then(this.onCoffeeLoaded)
+            .then(this.onBestLoaded)
             .catch(this.onError);
     }
 
     render() {
         const { bestItems, loading, error } = this.state;
-        console.log(loading);
-        console.log(error);
 
         return (
             <>
