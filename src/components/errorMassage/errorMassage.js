@@ -4,9 +4,9 @@ import img from '../../img/error.jpg';
 
 const ErrorMassage = () => {
     return (
-        <>
-            <img src={img} alt='error' className='best__item'/>
-        </>
+        <div>
+            <img src={img} alt='error' className='shop__girl'/>
+        </div>
     )
 }
 

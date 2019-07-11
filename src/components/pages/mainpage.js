@@ -33,6 +33,13 @@ export default class MainPage extends Component {
         })
     }
 
+    onError = (err) => {
+        this.setState({
+            error: true,
+            loading: false
+        })
+    }
+
     updateItems = () => {
         this.CoffeeService.getBest()
             .then(this.onBestLoaded)
@@ -41,6 +48,8 @@ export default class MainPage extends Component {
 
     render() {
         const { bestItems, loading, error } = this.state;
+        const errorMassage = error ? <ErrorMassage /> : null;
+        const spinner = loading ? <Spinner /> : null;
 
         return (
             <>
@@ -82,6 +91,8 @@ export default class MainPage extends Component {
                         <div className="row">
                             <div className="col-lg-10 offset-lg-1">
                                 <div className="best__wrapper">
+                                    {errorMassage}
+                                    {spinner}
                                     {
                                         bestItems.map(bestItem => {
                                             const { name, url, price } = bestItem;
@@ -96,12 +107,8 @@ export default class MainPage extends Component {
                                                 </div>
                                             )
 
-                                            const errorMassage = error ? <ErrorMassage key={name} /> : null;
-                                            const spinner = loading ? <Spinner key={name} /> : null;
                                             const content = !(loading || error) ? bestCoffee : null;
                                             return (
-                                                spinner,
-                                                errorMassage,
                                                 <Link to={urlName}
                                                     key={name}>{content}</Link>
                                             )

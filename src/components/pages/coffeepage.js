@@ -36,9 +36,10 @@ export default class CoffeePage extends Component {
         })
     }
 
-    componentDidCatch() {
+    onError = (err) => {
         this.setState({
-            error: true
+            error: true,
+            loading: false
         })
     }
 
@@ -71,7 +72,9 @@ export default class CoffeePage extends Component {
 
     render() {
         const { coffeeItems, loading, error, filter, term } = this.state;
-        const visible = this.searchCoffee(coffeeItems, term)
+        const visible = this.searchCoffee(coffeeItems, term);
+        const errorMassage = error ? <ErrorMassage /> : null;
+        const spinner = loading ? <Spinner /> : null;
 
         return (
             <>
@@ -146,11 +149,13 @@ export default class CoffeePage extends Component {
                         <div className="row">
                             <div className="col-lg-10 offset-lg-1">
                                 <div className="shop__wrapper">
+                                    {spinner}
+                                    {errorMassage}
                                     {
                                         visible.map(coffeeItem => {
                                             const { name, country, url, price } = coffeeItem;
                                             const urlName = `/ourcoffee/${name.replace(/ /g, '_')}`;
-                                            let errorMassage, spinner, content;
+                                            let content;
 
                                             if (country === filter || filter === null) {
 
@@ -166,13 +171,10 @@ export default class CoffeePage extends Component {
                                                     </Link>
                                                 )
 
-                                                errorMassage = error ? <ErrorMassage key={name} /> : null;
-                                                spinner = loading ? <Spinner key={name} /> : null;
                                                 content = !(loading || error) ? ourCoffee : null;
+
                                             }
                                             return (
-                                                spinner,
-                                                errorMassage,
                                                 content
                                             )
                                         })
