@@ -1,22 +1,13 @@
 export default class CoffeeService {
-    _apiBase = 'http://localhost:3000/';
+    _apiBase = '../db.json';
 
-    async getResourse(url) {
-        const res = await fetch(`${this._apiBase}${url}`)
+    async getResourse() {
+        const res = await fetch(`${this._apiBase}`)
         
         if (!res.ok) {
             throw new Error(`Could not fetch` + 
             `, received ${res.status}`);
         }
         return await res.json();
-    }
-    async getBest() {
-        return await this.getResourse('bestsellers');
-    }
-    async getCoffee() {
-        return await this.getResourse('coffee');
-    }
-    async getGoods() {
-        return await this.getResourse('goods');
     }
 }

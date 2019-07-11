@@ -21,7 +21,7 @@ export default class PleasurePage extends Component {
 
     onGoodsLoaded = (goodsItems) => {
         this.setState({
-            goodsItems,
+            goodsItems: goodsItems.goods,
             loading: false
         })
     }
@@ -34,7 +34,7 @@ export default class PleasurePage extends Component {
     }
 
     updateItems = () => {
-        this.CoffeeService.getGoods()
+        this.CoffeeService.getResourse()
             .then(this.onGoodsLoaded)
             .catch(this.onError);
     }

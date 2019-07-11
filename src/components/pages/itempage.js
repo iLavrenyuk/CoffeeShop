@@ -22,7 +22,7 @@ export default class ItemPage extends Component {
 
     onCoffeeLoaded = (coffeeItems) => {
         this.setState({
-            coffeeItems,
+            coffeeItems: coffeeItems.coffee,
             loading: false
         })
     }
@@ -34,7 +34,7 @@ export default class ItemPage extends Component {
     }
 
     updateItems = () => {
-        this.CoffeeService.getCoffee()
+        this.CoffeeService.getResourse()
             .then(this.onCoffeeLoaded)
             .catch(this.onError);
     }
