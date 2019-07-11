@@ -4,7 +4,7 @@ import { CoffeePage, MainPage, ItemPage, PleasurePage } from '../pages';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 
-const App = ({ name }) => {
+const App = () => {
 
     return (
         <>
@@ -12,14 +12,13 @@ const App = ({ name }) => {
                 <Route path='/' exact component={MainPage} />
                 <Route path='/pleasure' component={PleasurePage} />
                 <Route path='/ourcoffee' exact component={CoffeePage} />
-                <Route path='/ourcoffee/Death_Wish_Bean' component={ItemPage}
-                    // render={
-                    //     ({ match }) => {
-                    //         const { name } = match.params;
-                    //         console.log(name);
-                    //         return <ItemPage itemName={name} />
-                    //     }
-                    // }
+                <Route path='/ourcoffee/:name'
+                    render={
+                        ({ match }) => {
+                            const { name } = match.params;
+                            return <ItemPage  itemName={name} />
+                        }
+                    }
                 />
                 <Footer />
             </Router>

@@ -27,10 +27,9 @@ export default class MainPage extends Component {
         })
     }
 
-    onError = () => {
+    componentDidCatch() {
         this.setState({
-            error: true,
-            loading: false
+            error: true
         })
     }
 
@@ -86,13 +85,16 @@ export default class MainPage extends Component {
                                     {
                                         bestItems.map(bestItem => {
                                             const { name, url, price } = bestItem;
+                                            const urlName = `/ourcoffee/${name.replace(/ /g, '_')}`;
 
                                             const bestCoffee = (
-                                                <div className="best__item" key={name}>
+
+                                                <div className="shop__item" key={name}>
                                                     <img src={url} alt="coffee" />
-                                                    <div className="best__item-title">{name}</div>
-                                                    <div className="best__item-price">{price}</div>
-                                                </div>)
+                                                    <div className="shop__item-title">{name}</div>
+                                                    <div className="shop__item-price">{price}</div>
+                                                </div>
+                                            )
 
                                             const errorMassage = error ? <ErrorMassage key={name} /> : null;
                                             const spinner = loading ? <Spinner key={name} /> : null;
@@ -100,7 +102,8 @@ export default class MainPage extends Component {
                                             return (
                                                 spinner,
                                                 errorMassage,
-                                                content
+                                                <Link to={urlName}
+                                                    key={name}>{content}</Link>
                                             )
                                         })
                                     }

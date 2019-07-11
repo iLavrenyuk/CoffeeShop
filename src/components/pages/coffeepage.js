@@ -36,10 +36,9 @@ export default class CoffeePage extends Component {
         })
     }
 
-    onError = () => {
+    componentDidCatch() {
         this.setState({
-            error: true,
-            loading: false
+            error: true
         })
     }
 
@@ -157,8 +156,7 @@ export default class CoffeePage extends Component {
 
                                                 const ourCoffee = (
                                                     <Link to={urlName}
-                                                        key={name}
-                                                        name={this.props.urlName}>
+                                                        key={name}>
                                                         <div className="shop__item">
                                                             <img src={url} alt="coffee" />
                                                             <div className="shop__item-title">{name}</div>
