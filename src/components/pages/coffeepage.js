@@ -9,12 +9,21 @@ import ErrorMassage from '../errorMassage';
 
 
 export default class CoffeePage extends Component {
-    CoffeeService = new CoffeeService();
-    state = {
-        coffeeItems: [],
-        loading: true,
-        error: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            coffeeItems: [],
+            loading: true,
+            error: false,
+            filter: null,
+            term: ''
+        }
+
+        this.search = this.search.bind(this);
     }
+
+    CoffeeService = new CoffeeService();
+
 
     componentDidMount() {
         this.updateItems();
@@ -40,8 +49,30 @@ export default class CoffeePage extends Component {
             .catch(this.onError);
     }
 
+    updateFilter = (filter) => {
+        this.setState({
+            filter: filter
+        })
+    }
+
+    search(e) {
+        const term = e.target.value;
+        this.setState({ term });
+    }
+
+    searchCoffee(items, term) {
+        if (term.length === 0) {
+            return items
+        }
+
+        return items.filter((item) => {
+            return item.name.toLowerCase().indexOf(term.toLowerCase()) > -1
+        });
+    }
+
     render() {
-        const { coffeeItems, loading, error } = this.state;
+        const { coffeeItems, loading, error, filter, term } = this.state;
+        const visible = this.searchCoffee(coffeeItems, term)
 
         return (
             <>
@@ -76,7 +107,7 @@ export default class CoffeePage extends Component {
                                 <img className="shop__girl" src={coffeeGirl} alt="girl" />
                             </div>
                             <div className="col-lg-4">
-                                <div className="title">About our beans</div>
+                                <div className="title">About our goods</div>
                                 <img className="beanslogo" src={beansDark} alt="Beans logo" />
                                 <div className="shop__text">
                                     Extremity sweetness difficult behaviour he of. On disposal of as landlord horrible.
@@ -95,18 +126,20 @@ export default class CoffeePage extends Component {
                             <div className="col-lg-4 offset-2">
                                 <form action="#" className="shop__search">
                                     <label className="shop__search-label">Looking for</label>
-                                    <input id="filter" type="text" placeholder="start typing here..." className="shop__search-input" />
+                                    <input id="filter" type="text" placeholder="start typing here..." className="shop__search-input"
+                                        onChange={this.search} />
                                 </form>
                             </div>
                             <div className="col-lg-4">
                                 <div className="shop__filter">
                                     <div className="shop__filter-label">
-                                        Or filter
+                                        Filter
                                 </div>
                                     <div className="shop__filter-group">
-                                        <button className="shop__filter-btn">Brazil</button>
-                                        <button className="shop__filter-btn">Kenya</button>
-                                        <button className="shop__filter-btn">Columbia</button>
+                                        <button className="shop__filter-btn" onClick={() => this.updateFilter(null)}>x</button>
+                                        <button className="shop__filter-btn" onClick={() => this.updateFilter('Brazil')}>Brazil</button>
+                                        <button className="shop__filter-btn" onClick={() => this.updateFilter('Kenya')}>Kenya</button>
+                                        <button className="shop__filter-btn" onClick={() => this.updateFilter('Columbia')}>Columbia</button>
                                     </div>
                                 </div>
                             </div>
@@ -115,21 +148,30 @@ export default class CoffeePage extends Component {
                             <div className="col-lg-10 offset-lg-1">
                                 <div className="shop__wrapper">
                                     {
-                                        coffeeItems.map(coffeeItem => {
+                                        visible.map(coffeeItem => {
                                             const { name, country, url, price } = coffeeItem;
+                                            const urlName = `/ourcoffee/${name.replace(/ /g, '_')}`;
+                                            let errorMassage, spinner, content;
 
-                                            const ourCoffee = (
-                                                <div className="shop__item" key={name}>
-                                                    <img src={url} alt="coffee" />
-                                                    <div className="shop__item-title">{name}</div>
-                                                    <div className="shop__item-country">{country}</div>
-                                                    <div className="shop__item-price">{price}</div>
-                                                </div>
-                                            )
+                                            if (country === filter || filter === null) {
 
-                                            const errorMassage = error ? <ErrorMassage key={name} /> : null;
-                                            const spinner = loading ? <Spinner key={name} /> : null;
-                                            const content = !(loading || error) ? ourCoffee : null;
+                                                const ourCoffee = (
+                                                    <Link to={urlName}
+                                                        key={name}
+                                                        name={this.props.urlName}>
+                                                        <div className="shop__item">
+                                                            <img src={url} alt="coffee" />
+                                                            <div className="shop__item-title">{name}</div>
+                                                            <div className="shop__item-country">{country}</div>
+                                                            <div className="shop__item-price">{price}</div>
+                                                        </div>
+                                                    </Link>
+                                                )
+
+                                                errorMassage = error ? <ErrorMassage key={name} /> : null;
+                                                spinner = loading ? <Spinner key={name} /> : null;
+                                                content = !(loading || error) ? ourCoffee : null;
+                                            }
                                             return (
                                                 spinner,
                                                 errorMassage,

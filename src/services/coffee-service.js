@@ -16,4 +16,7 @@ export default class CoffeeService {
     async getCoffee() {
         return await this.getResourse('coffee');
     }
+    async getGoods() {
+        return await this.getResourse('goods');
+    }
 }
